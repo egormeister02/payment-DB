@@ -93,4 +93,48 @@ paths:
         '404':
           description: Client not found
 
-
+  /clients/{clientId}/block-history:
+      get:
+        summary: Retrieve the block history of a client
+        operationId: getClientBlockHistory
+        tags:
+          - clients
+        parameters:
+          - name: clientId
+            in: path
+            required: true
+            description: Unique identifier of the client
+            schema:
+              type: integer
+        responses:
+          '200':
+            description: Block history retrieved successfully
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      historyId:
+                        type: integer
+                        description: Unique identifier of the block history record
+                      status:
+                        type: string
+                        enum: [block, unblock]
+                        description: Status of the block
+                      reason:
+                        type: string
+                        enum: [fraud, incorrect_details, other]
+                        description: Reason for the block
+                      dateFrom:
+                        type: string
+                        format: date-time
+                        description: Timestamp when the block was initiated
+                      dateTo:
+                        type: string
+                        format: date-time
+                        description: Timestamp when the block was lifted, if applicable
+          '404':
+            description: Client not found
+            
