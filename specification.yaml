@@ -115,17 +115,15 @@ paths:
                   type: array
                   items:
                     type: object
-                    properties:
+                      properties:
+                      clientId:
+                      type: integer
                       historyId:
                         type: integer
                         description: Unique identifier of the block history record
-                      status:
-                        type: string
-                        enum: [block, unblock]
-                        description: Status of the block
                       reason:
                         type: string
-                        enum: [fraud, incorrect_details, other]
+                        enum: [fraud, incorrect_details]
                         description: Reason for the block
                       dateFrom:
                         type: string
