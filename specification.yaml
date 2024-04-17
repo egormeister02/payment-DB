@@ -1,0 +1,96 @@
+openapi: 3.0.0
+info:
+  title: Payment Status API
+  version: 1.0.0
+  description: API for managing payment blocking status for clients.
+servers:
+  - url: https://api.yourdomain.com/v1
+    description: Production server
+
+paths:
+  /clients/{clientId}/block:
+    post:
+      summary: Block a client's payments
+      operationId: blockClientPayments
+      tags:
+        - clients
+      parameters:
+        - name: clientId
+          in: path
+          required: true
+          description: Unique identifier of the client
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                reason:
+                  type: string
+                  enum: [fraud, incorrect_details]
+                  description: Reason for blocking the client's payments
+      responses:
+        '200':
+          description: Payment status updated to blocked
+        '404':
+          description: Client not found
+        '400':
+          description: Invalid input
+
+  /clients/{clientId}/unblock:
+    post:
+      summary: Unblock a client's payments
+      operationId: unblockClientPayments
+      tags:
+        - clients
+      parameters:
+        - name: clientId
+          in: path
+          required: true
+          description: Unique identifier of the client
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Payment status updated to unblocked
+        '404':
+          description: Client not found
+        '400':
+          description: Invalid input
+
+  /clients/{clientId}/status:
+    get:
+      summary: Check if a client's payments are blocked and for what reason
+      operationId: checkClientPaymentStatus
+      tags:
+        - clients
+      parameters:
+        - name: clientId
+          in: path
+          required: true
+          description: Unique identifier of the client
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Payment status retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  clientId:
+                    type: integer
+                  status:
+                    type: string
+                    enum: [block, unblock]
+                  reason:
+                    type: string
+                    enum: [fraud, incorrect_details, not blocked]
+        '404':
+          description: Client not found
+
+
